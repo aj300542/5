@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>农历年份转换</title>
+    <script>
+        const HeavenlyStems = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+        const EarthlyBranches = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+        const ZodiacSigns = ['鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪'];
+        const FiveElementsH = ['木', '木', '火', '火', '土', '土', '金', '金', '水', '水'];
+        const FiveElementsE = ['水', '土', '木', '木', '土', '火', '火', '土', '金', '金', '土', '水'];
+        const HeavenlyStemsBC = ['癸', '壬', '辛', '庚', '己', '戊', '丁', '丙', '乙', '甲'];
+        const EarthlyBranchesBC = ['亥', '戌', '酉', '申', '未', '午', '巳', '辰', '卯', '寅', '丑', '子'];
+        const ZodiacSignsBC = ['猪', '狗', '鸡', '猴', '羊', '马', '蛇', '龙', '兔', '虎', '牛', '鼠'];
+        const FiveElementsHBC = ['水', '水', '金', '金', '土', '土', '火', '火', '木', '木'];
+        const FiveElementsEBC = ['水', '土', '金', '金', '土', '火', '火', '土', '木', '木', '土', '水'];
+
+        function calculateLunarYear() {
+            let year = parseInt(document.getElementById('yearInput').value);
+            let lunarYear;
+            if (year < 4) {
+                // 处理已知的数据
+                switch (year) {
+                    case 3:
+                        lunarYear = '癸亥年（猪年），五行：水水';
+                        break;
+                    case 2:
+                        lunarYear = '壬戌年（狗年），五行：水土';
+                        break;
+                    case 1:
+                        lunarYear = '辛酉年（鸡年），五行：金金';
+                        break;
+                    default:
+                        lunarYear = '未知年份';
+                        break;
+                }
+            } else {
+                let stemIndex = (year - 4) % 10;
+                let branchIndex = (year - 4) % 12;
+                let zodiacSign = ZodiacSigns[branchIndex];
+                lunarYear = HeavenlyStems[stemIndex] + EarthlyBranches[branchIndex] + '年' + '（' + zodiacSign + '年）' + '，五行：' + FiveElementsH[stemIndex] + FiveElementsE[branchIndex];
+            }
+            document.getElementById('result').innerText = '公元年份的农历年份：' + lunarYear;
+        }
+        window.onload = function () {
+            // 设置输入框的初始值为当前年份
+            document.getElementById('yearInput').value = new Date().getFullYear();
+            document.getElementById('yearInputBC').value = -551;
+            // 自动触发按钮的点击事件
+            document.querySelectorAll('button').forEach(button => button.click());
+        };
+        function calculateLunarYearBC() {
+            let year = parseInt(document.getElementById('yearInputBC').value);
+            let stemIndexBC = Math.abs(year - 2) % 10;// -1年是庚
+            let branchIndexBC = Math.abs(year - 2) % 12; // -1年是申
+            let zodiacSignBC = ZodiacSignsBC[branchIndexBC];
+            let lunarYear = HeavenlyStemsBC[stemIndexBC] + EarthlyBranchesBC[branchIndexBC] + '年' + '（' + zodiacSignBC + '年）' + '，五行：' + FiveElementsHBC[stemIndexBC] + FiveElementsEBC[branchIndexBC];
+            document.getElementById('resultBC').innerText = '公元前的农历年份：' + lunarYear;
+        }
+    </script>
+</head>
+
+<body>
+    <input type="number" id="yearInput" placeholder="请输入公元年份">
+    <button onclick="calculateLunarYear()">转换为农历年份</button>
+    <p id="result" class="sz-elements"></p>
+    <input type="number" id="yearInputBC" placeholder="请输入公元前的年份（负数）">
+    <button onclick="calculateLunarYearBC()">转换为农历年份</button>
+    <p id="resultBC" class="sz-elements"></p>
+</body>
+
+</html>

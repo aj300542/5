@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <title>农历转换</title>
+  <style>
+    ::-webkit-scrollbar {
+      display: none;
+    }
+
+    body {
+
+      height: 100vh;
+      margin: 0;
+      background-color: transparent;
+    }
+
+    /* 新增的全局居中样式 */
+    body,
+    h1,
+    p,
+    label,
+    input,
+    button {
+      text-align: center;
+    }
+
+    .input-container {
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 0%;
+      left: 15%;
+      padding: 2vh;
+      align-content: center;
+      justify-content: space-around;
+    }
+    .container2 {
+      position: fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      top: 15%;
+      left: 34%;
+      font-size: 5vh;
+      align-content: center;
+      justify-content: space-around;
+    }
+    /* 新增的样式，用于设置输入框的宽度 */
+    input#whour,
+    input#wday,
+    input#wmonth {
+      width: 3em;
+    }
+
+    input#wyear {
+      width: 6em;
+    }
+  </style>
+
+
+  <style type="text/css">
+    .sr {
+      border: 1px solid #ddd;
+      padding: 5px;
+      font-family: sans-serif;
+      outline: none;
+    }
+
+    .tou {
+      color: #F00
+    }
+
+    .nei {
+      color: #000
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <article class="content">
+    <p style="color:#458B74;"><input type="button" id="btn1" name="btn1" value="转换日期" onclick="handleWork(this);" />
+    <div class="input-container">
+
+      <input name="y" id="wyear" class="tin" type="number" pattern="\d*" value="cyear"
+        onFocus=OnEnter(this) onBlur=OnExit(this) /><label class="lab">年</label><br>
+
+      <input name="m" id="wmonth" type="number" pattern="\d*" value="cmonth"
+        onFocus=OnEnter(this) onBlur=OnExit(this) /><label class="lab">月</label><br>
+
+      <input name="d" id="wday" type="number" pattern="\d*" value="cday"
+        onFocus=OnEnter(this) onBlur=OnExit(this) /><label class="lab">日</label><br>
+
+      <input name="h" id="whour" type="number" pattern="\d*" value="chour"
+        onFocus=OnEnter(this) onBlur=OnExit(this) /><label class="lab">时</label><br>
+
+
+    </div>
+    </p><span id="wtext"></span>
+    <div class="container2">
+      <span id="vtext"></span>
+    </div>
+
+
+    <script type="text/javascript">
+      function handleBegin() {
+        r_state = 2;
+      }
+    </script>
+
+    <script type="text/javascript" language="JavaScript" src="js/4_bazi.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      function handleWork(obj) {
+        var v = obj.value;
+        handleBegin();
+        var res = wInq();
+        obj.value = v;
+      }
+    </script>
+
+    <script>
+
+      function OnEnter(field) { if (field.value == field.defaultValue) { field.value = ""; } }
+
+      function OnExit(field) { if (field.value == "") { field.value = field.defaultValue; } }
+
+    </script>
+    <script>
+      function OnEnter(field) { if (field.value == field.defaultValue) { field.value = ""; } }
+      function OnExit(field) { if (field.value == "") { field.value = field.defaultValue; } }
+
+      window.onload = function () {
+        var now = new Date();
+        var cyear = now.getFullYear();
+        var cmonth = now.getMonth() + 1; // JavaScript的月份是从0开始的，所以需要加1
+        var cday = now.getDate();
+        var chour = now.getHours();
+        document.getElementById('wyear').value = cyear;
+        document.getElementById('wmonth').value = cmonth;
+        document.getElementById('wday').value = cday;
+        document.getElementById('whour').value = chour;
+
+        // 新增的代码，用于在页面加载完成后自动点击按钮
+        document.getElementById('btn1').click();
+      };
+
+    </script>
+
+
+
+</body>
+
+</html>

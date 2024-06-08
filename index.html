@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Ctimer</title>
+    <title>二十四节气Twenty-four Chinese Solar Terms</title>
+
+    <link rel="shortcut icon" href="nixie.ico">
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @font-face {
+            font-family: 'Nixiebold-boldbig';
+            src: url('fonts/Nixiebold-boldbig.woff2') format('woff2'),
+                url('fonts/Nixiebold-boldbig.woff') format('woff'),
+                url('fonts/Nixiebold-boldbig.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            background: transparent;
+            font-family: 'Nixiebold-boldbig', Arial, sans-serif;
+        }
+
+
+        .columna {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.25em;
+            line-height: 0.25em;
+            margin: auto;
+        }
+
+
+        .display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: left;
+            letter-spacing: 0.25em;
+            line-height: 0.25em;
+            margin-bottom: -3vw;
+        }
+
+
+        .display {
+            z-index: 99;
+            background: transparent;
+            border-radius: 20px;
+            height: 23vh;
+        }
+
+        .sz-elements {
+            line-height: 23vh;
+            font-size: 12vh;
+            padding-left: 0.1em;
+            font-family: 'Nixiebold-boldbig', Arial, sans-serif;
+            background: linear-gradient(135deg, #14ffe9, #ffeb3b, #ff00e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: animate 7.5s linear infinite;
+        }
+
+        @keyframes animate {
+            100% {
+                filter: hue-rotate(360deg);
+            }
+        }
+
+        .iframe-container {
+            position: absolute;
+            top: 5%;
+            left: -20vw;
+            transform: translate(-25%, -50%);
+            text-align: center;
+            transform: translate(-25vw, -1vw);
+            transform: scale(1, 1);
+        }
+
+        .iframe-container iframe {
+            width: 500%;
+            height: 100vh;
+            transform: scale(1);
+            border: 0px solid black;
+            margin: 0px;
+            overflow: hidden;
+            transition: opacity 6s;
+        }
+
+        .iframe-container2 {
+            position: absolute;
+            top: 62%;
+            left: 75%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+
+            transform: scale(1.5, 1.5);
+        }
+
+        .iframe-container2 iframe {
+            width: 100%;
+            height: 100vh;
+            transform: scale(1);
+            border: 0px solid black;
+            margin: 0px;
+            overflow: hidden;
+            transition: opacity 6s;
+        }
+
+        .iframe-container3 {
+            position: absolute;
+            top: 50%;
+            left: 32%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: -1;
+            transform: scale(1.5, 1.5);
+        }
+
+        .iframe-container3 iframe {
+            width: 4vh;
+            height: 4vh;
+            border-radius: 50%;
+            transform: scale(2);
+            border: 0px solid black;
+            margin: 0px;
+            overflow: hidden;
+            transition: opacity 6s;
+
+        }
+        
+        .iframe-container4 {
+            position: absolute;
+
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 8;
+            transform: scale(1, 1);
+        }
+
+        .iframe-container4 iframe {
+            width: 100vw;
+            height: 100vh;
+
+            transform: scale(1);
+            border: 0px solid black;
+            margin: 0px;
+            overflow: hidden;
+            transition: opacity 6s;
+
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="columna">
+        <div class="display">
+            <div id="sz-year" class="sz-elements"></div><span id="sz-year">-</span>
+            <div id="sz-month" class="sz-elements"></div>
+            <div id="sz-day" class="sz-elements"></div>
+
+        </div>
+        <div class="display">
+            <div id="sz-hours-tens" class="sz-elements"></div>
+            <div id="sz-hours-ones" class="sz-elements"></div><span id="sz-year">:</span>
+            <div id="sz-minutes-tens" class="sz-elements"></div>
+            <div id="sz-minutes-ones" class="sz-elements"></div><span id="sz-year">:</span>
+            <div id="sz-seconds-tens" class="sz-elements"></div>
+            <div id="sz-seconds-ones" class="sz-elements"></div>
+        </div>
+        <div class="display">
+            <div id="sz-chinese-hour" class="sz-elements"></div>
+            <div id="sz-chinese-hour-words"></div>
+            <div id="sz-solar-term"></div>
+        </div>
+    </div>
+
+    <div class="iframe-container">
+        <iframe id="sz-hours-tens" src="earth.html"></iframe>
+    </div>
+    <div class="iframe-container2">
+        <iframe id="sz-hours-tens" src="CV2.html"></iframe>
+    </div>
+    <div class="iframe-container3">
+        <iframe id="sz-hours-tens" src="moon3.html"></iframe>
+    </div>
+    <div class="iframe-container4">
+        <iframe id="sz-hours-tens" src="bazi.html"></iframe>
+    </div>
+    <script>
+        function szDisplayNumber(id, number) {
+            // 如果id是'year', 'month'或'day'，则长度为4或2，否则不变
+            let displayNumber = number;
+            if (id === 'year') {
+                displayNumber = String(number).padStart(4, '0');
+            } else if (id === 'month' || id === 'day') {
+                displayNumber = String(number).padStart(2, '0');
+            }
+            document.getElementById("sz-" + id).innerText = displayNumber;
+        }
+        function szDisplayChineseHour() {
+            const now = new Date();
+            const hours = now.getHours();
+            const chineseHours = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
+            let chineseHourIndex;
+            if (hours >= 23 || hours < 1) {
+                chineseHourIndex = 0;  // 子时
+            } else if (hours >= 1 && hours < 3) {
+                chineseHourIndex = 1;  // 丑时
+            } else {
+                chineseHourIndex = Math.floor((hours + 1) / 2);
+            }
+            const chineseHour = chineseHours[chineseHourIndex];
+            document.getElementById("sz-chinese-hour").innerText = chineseHour;
+        }
+        function szDisplayChineseHourWords() {
+            const now = new Date();
+            const hours = now.getHours();
+            const chineseHourWords = ["夜半", "鸡鸣", "平旦", "日出", "食时", "隅中", "日中", "日昳", "哺时", "日入", "黄昏", "人定"];
+            let chineseHourWordIndex;
+            if (hours >= 23 || hours < 1) {
+                chineseHourWordIndex = 0;  // 子时
+            } else if (hours >= 1 && hours < 3) {
+                chineseHourWordIndex = 1;  // 丑时
+            } else {
+                chineseHourWordIndex = Math.floor((hours + 1) / 2);
+            }
+            const chineseHourWord = chineseHourWords[chineseHourWordIndex];
+            document.getElementById("sz-chinese-hour-words").innerText = chineseHourWord;
+        }
+        function szDisplaySolarTerm() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const solarTerms = ["小寒", "大寒", "立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑", "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至"];
+            const solarTermDates = [new Date(year, 0, 5), new Date(year, 0, 20), new Date(year, 1, 4), new Date(year, 1, 19), new Date(year, 2, 6), new Date(year, 2, 21), new Date(year, 3, 5), new Date(year, 3, 20), new Date(year, 4, 5), new Date(year, 4, 21), new Date(year, 5, 5), new Date(year, 5, 21), new Date(year, 6, 7), new Date(year, 6, 23), new Date(year, 7, 7), new Date(year, 7, 23), new Date(year, 8, 8), new Date(year, 8, 23), new Date(year, 9, 8), new Date(year, 9, 23), new Date(year, 10, 7), new Date(year, 10, 22), new Date(year, 11, 7), new Date(year, 11, 22), new Date(year, 12, 6), new Date(year, 12, 21)];
+            let solarTermIndex = solarTermDates.findIndex(date => date > now) - 1;
+            if (solarTermIndex === -1) {
+                solarTermIndex = 23;
+            }
+            const solarTerm = solarTerms[solarTermIndex];
+            document.getElementById("sz-solar-term").innerText = solarTerm;
+        }
+
+        function szDisplayTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1; // JavaScript months are 0-11
+            const day = now.getDate();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            szDisplayNumber('year', year);
+            szDisplayNumber('month', month);
+            szDisplayNumber('day', day);
+            szDisplayNumber('hours-tens', Math.floor(hours / 10));
+            szDisplayNumber('hours-ones', hours % 10);
+            szDisplayNumber('minutes-tens', Math.floor(minutes / 10));
+            szDisplayNumber('minutes-ones', minutes % 10);
+            szDisplayNumber('seconds-tens', Math.floor(seconds / 10));
+            szDisplayNumber('seconds-ones', seconds % 10);
+
+            setTimeout(szDisplayTime, 1000);
+        }
+
+        window.onload = function () {
+            szDisplayTime();
+            szDisplayChineseHour();
+            szDisplayChineseHourWords();
+            szDisplaySolarTerm();  // 添加这行代码
+        };
+
+
+    </script>
+
+    </html>

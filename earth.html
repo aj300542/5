@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>二十四节气Twenty-four Chinese Solar Terms</title>
+    <link rel="shortcut icon" href="nixie.ico">
+    <link rel="stylesheet" href="style/color.css">
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: transparent;
+        }
+
+        #earth-container {
+            width: 20vw;
+            height: 20vw;
+            position: relative;
+        }
+
+        img {
+            width: 25vw;
+            height: auto;
+            max-width: 100%;
+
+        }
+
+        #earth {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(139, 139, 255, 0.68) 4%, rgba(0, 119, 255, 0.68) 6.5%, rgba(0, 119, 255, 0.68) 31.32%, rgba(132, 195, 255, 0.68) 36.32%, rgba(132, 195, 255, 0.68) 63.68%, rgba(0, 119, 255, 0.68) 68.68%, rgba(0, 119, 255, 0.68) 93.5%, rgba(147, 147, 255, 0.68) 96%), url('img/earth3_512.png');
+            background-size: cover;
+            border-radius: 50%;
+            position: absolute;
+            transform: rotate(23.44deg);
+        }
+
+        #sun {
+            width: 10vw;
+            height: 10vw;
+            left: 27.5vw;
+            background: yellow;
+            border-radius: 50%;
+            position: absolute;
+            top: 5vw;
+            left: -5vw;
+        }
+
+        #lightcircle {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, yellow 40%, black 55%);
+            border-radius: 75%;
+            opacity: 0.5;
+            position: absolute;
+            mix-blend-mode: overlay;
+        }
+
+        #big-circle {
+            position: absolute;
+            width: 45vw;
+            /* lightcircle的1.5倍 */
+            height: 45vw;
+            /* lightcircle的1.5倍 */
+            border-radius: 75%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #000;
+            opacity: 0.0;
+        }
+
+        #button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            transform: translate(-1.5vw, -1vw);
+            opacity: 0.45;
+            text-align: center;
+        }
+
+        .solar-term-button {
+            position: absolute;
+            width: 3vw;
+            height: 2vw;
+            background-color: transparent;
+            opacity: 0.5;
+        }
+
+        #solar-term-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2vw;
+            align-items: center;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="earth-container">
+        <div id="sun"></div>
+        <div id="earth"></div>
+        <div id="lightcircle"></div>
+        <div id="big-circle"></div>
+        <div id="button-container"></div>
+    </div>
+    <p id="solar-term-text"></p> <!-- 新增的显示节气的元素 -->
+    <script>
+        var earth = document.getElementById('earth');
+        var buttonContainer = document.getElementById('button-container');
+        var solarTermText = document.getElementById('solar-term-text'); // 获取显示节气的元素
+        var solarTerms = ['冬至', '小寒', '大寒', '立春', '雨水', '惊蛰', '春分', '清明', '谷雨', '立夏', '小满', '芒种', '夏至', '小暑', '大暑', '立秋', '处暑', '白露', '秋分', '寒露', '霜降', '立冬', '小雪', '大雪'];
+        var step = (23.44 * 2) / (solarTerms.length / 2);
+
+        for (var i = 0; i < solarTerms.length; i++) {
+            var button = document.createElement('button');
+            button.textContent = solarTerms[i];
+            button.className = 'solar-term-button';
+            button.style.transform = 'rotate(' + (i * 360 / solarTerms.length) + 'deg) translate(0, -12.5vw) rotate(-' + (i * 360 / solarTerms.length) + 'deg)';
+            button.onclick = (function (i) {
+                return function () {
+                    var angle;
+                    if (i < solarTerms.length / 2) {
+                        angle = 23.44 - i * step;
+                    } else {
+                        angle = -23.44 + (i - solarTerms.length / 2) * step;
+                    }
+                    earth.style.transform = 'rotate(' + angle + 'deg)';
+                    solarTermText.textContent = '' + solarTerms[i]; // 更新显示节气的元素的内容
+                };
+            })(i);
+            buttonContainer.appendChild(button);
+        }
+
+        window.onload = function () {
+            var date = new Date();
+            var month = date.getMonth();
+            var day = date.getDate();
+            var solarTermIndex = getApproximateSolarTerm(month, day);
+            var button = document.getElementsByClassName('solar-term-button')[solarTermIndex];
+            button.click();
+        };
+
+        function getApproximateSolarTerm(month, day) {
+            var solarTermDates = [
+                [11, 22], [12, 7], [12, 22], [1, 6], [1, 20], [2, 4], [2, 19], [3, 6], [3, 21], [4, 5], [4, 20],
+                [5, 6], [5, 21], [6, 6], [6, 22], [7, 7], [7, 23], [8, 8], [8, 23],
+                [9, 8], [9, 23], [10, 8], [10, 24], [11, 8]
+            ];
+            var closestTerm = 0;
+            var minDifference = Number.MAX_VALUE;
+            for (var i = 0; i < solarTermDates.length; i++) {
+                var difference = Math.abs((solarTermDates[i][0] - month) * 30 + solarTermDates[i][1] - day);
+                if (difference < minDifference) {
+                    minDifference = difference;
+                    closestTerm = i;
+                }
+            }
+            return closestTerm;
+        }
+    </script>
+
+</body>
+
+</html>

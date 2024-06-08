@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>月相计算</title>
+    <style>
+        body {
+            background-color: transparent;
+            /* 设置网页背景颜色为黑色 */
+            color: white;
+            /* 设置文本颜色为白色 */
+            display: flex;
+            /* 使用Flex布局 */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            height: 100vh;
+            /* 设置body高度为视口高度 */
+            margin: 0;
+            /* 移除默认的外边距 */
+            font-size: 0.2vw;
+        }
+
+        #moonImage {
+            width: 45vw;
+            /* 设置图像宽度 */
+            height: 45vw;
+            /* 设置图像高度 */
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="moonPhase"></h1>
+    <img id="moonImage" src="    " alt="月相图像">
+
+    <script>
+        // 存储SVG文件路径的对象
+        var moonPhases = {
+            "新月": "svg/1moonnew.svg",
+            "眉月": "svg/2mooneyebrow.svg",
+            "上弦月": "svg/3moonhalf.svg",
+            "上凸月": "svg/4moonwaxing.svg",
+            "满月": "svg/5moonfull.svg.svg",
+            "下凸月": "svg/6moonwaning.svg",
+            "下弦月": "svg/7moonlquarter.svg",
+            "残月": "svg/8moonwcrescent.svg"
+        };
+
+        function getMoonPhase() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var month = now.getMonth();
+            var day = now.getDate();
+
+            var c = e = jd = b = 0;
+
+            if (month < 3) {
+                year--;
+                month += 12;
+            }
+
+            ++month;
+            c = 365.25 * year;
+            e = 30.6 * month;
+            jd = c + e + day - 694039.09;  // jd is total days elapsed
+            jd /= 29.53058867;  // divide by the moon cycle
+            b = parseInt(jd);   // int(jd) -> b, take integer part of jd
+            jd -= b;            // subtract integer part to leave fractional part of original jd
+            b = Math.round(jd * 8);  // scale fraction from 0-8 and round
+
+            if (b >= 8) {
+                b = 0;  // 0 and 8 are the same so turn 8 into 0
+            }
+
+            var phaseName;
+            switch (b) {
+                case 0:
+                    phaseName = "新月";
+                    break;
+                case 1:
+                    phaseName = "眉月";
+                    break;
+                case 2:
+                    phaseName = "上弦月";
+                    break;
+                case 3:
+                    phaseName = "上凸月";
+                    break;
+                case 4:
+                    phaseName = "满月";
+                    break;
+                case 5:
+                    phaseName = "下凸月";
+                    break;
+                case 6:
+                    phaseName = "下弦月";
+                    break;
+                case 7:
+                    phaseName = "残月";
+                    break;
+            }
+
+            // 返回月相名称和对应的SVG文件路径
+            return { name: phaseName, svg: moonPhases[phaseName] };
+        }
+
+        var moonPhase = getMoonPhase();
+        document.getElementById('moonPhase').innerText = "" + moonPhase.name;
+        document.getElementById('moonImage').src = moonPhase.svg;
+    </script>
+</body>
+
+</html>

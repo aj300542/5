@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>月相 Moon Phases</title>
+    <link rel="shortcut icon" href="moon.ico">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: black;
+        }
+
+        #moon-container {
+            width: 20vw;
+            height: 20vw;
+            position: relative;
+        }
+
+        #moon {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(139, 139, 255, 0.68) 4%, rgba(0, 119, 255, 0.68) 6.5%, rgba(0, 119, 255, 0.68) 31.32%, rgba(132, 195, 255, 0.68) 36.32%, rgba(132, 195, 255, 0.68) 63.68%, rgba(0, 119, 255, 0.68) 68.68%, rgba(0, 119, 255, 0.68) 93.5%, rgba(147, 147, 255, 0.68) 96%), url('img/earth3_512.png');
+            background-size: cover;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        #shadow {
+            width: 100%;
+            height: 100%;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            transition: width 0.5s;
+        }
+
+        #play-pause-button {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 5vw;
+            height: 5vw;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="moon-container">
+        <div id="moon"></div>
+        <div id="shadow"></div>
+        <div id="play-pause-button"></div>
+    </div>
+
+    <script>
+        var moon = document.getElementById('moon');
+        var shadow = document.getElementById('shadow');
+        var playPauseButton = document.getElementById('play-pause-button');
+
+        var isPlaying = false;
+        var intervalId;
+        var simulatedDate = new Date();
+
+        function updateMoonPhase() {
+            var daysInMonth = new Date(simulatedDate.getFullYear(), simulatedDate.getMonth() + 1, 0).getDate();
+            var phase = (simulatedDate.getDate() / daysInMonth) * 100;
+            shadow.style.width = (100 - phase) + '%';
+        }
+
+        function startAnimation() {
+            if (!isPlaying) {
+                isPlaying = true;
+                intervalId = setInterval(function() {
+                    simulatedDate.setDate(simulatedDate.getDate() + 1);
+                    updateMoonPhase();
+                }, 1000);
+            }
+        }
+
+        function stopAnimation() {
+            if (isPlaying) {
+                isPlaying = false;
+                clearInterval(intervalId);
+            }
+        }
+
+        playPauseButton.onclick = function() {
+            if (isPlaying) {
+                stopAnimation();
+            } else {
+                startAnimation();
+            }
+        };
+
+        updateMoonPhase();
+    </script>
+</body>
+
+</html>
