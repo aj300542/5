@@ -1,0 +1,12 @@
+
+      <svg 
+        viewBox="0 0 800 800" 
+        width="800" 
+        height="800" 
+        version="1.1" 
+        xmlns="http://www.w3.org/2000/svg" 
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+      >
+        <path d="M 620 400 C 620 200 480 40 400 20 A 50 50 0 1 1 400 780 C 480 760 620 600 620 400 " stroke="#555" stroke-width="4" fill="#ffffff"></path>
+      </svg>
+    
